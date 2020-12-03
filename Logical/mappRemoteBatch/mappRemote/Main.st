@@ -1,0 +1,12 @@
+
+PROGRAM _INIT
+	 
+END_PROGRAM
+
+PROGRAM _CYCLIC
+	IF mappRemoteBatch.execute THEN
+	
+	END_IF
+	 
+END_PROGRAM
+
