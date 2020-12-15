@@ -14,7 +14,7 @@ This is a sample project to execute a shell command on a remote PC. The remote c
 * alive_counter &nbsp; This counter is used to detect the connection state
 * connected &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Indicates that the remote PC is connected and ready to receive a command
 * status  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The status of the command
-<br/>
+
 The following status codes show the state of the command<br/>
 65535 &nbsp;The command is still busy<br/>
 10000 &nbsp;Generic command error<br/>
