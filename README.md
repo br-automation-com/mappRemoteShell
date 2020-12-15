@@ -9,15 +9,21 @@
 ## Introduction
 This is a sample project to execute a shell command on a remote PC. The remote command is executed with a Python script that connects via OPC UA to the B&R PLC. The PLC only needs the variable structure to execute command and some code to indicate the connection status. The sample uses a mappView visualization for demo purpose but mappView is not required to run the sample. The variable structure mappRemoteShell has the following members:
 
-* execute &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Starts the remote command
-* command &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The shell command as it would be typed into shell on the remote PC
-* status  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The status of the command
+* execute &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Starts the remote command. The Python script resets this variable when the command is finished.
+* command &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The shell command that is excecuted on the remote PC
 * alive_counter &nbsp; This counter is used to detect the connection state
 * connected &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Indicates that the remote PC is connected and ready to receive a command
+* status  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The status of the command
+<br/>
+The following status codes show the state of the command<br/>
+65535 &nbsp;The command is still busy<br/>
+10000 &nbsp;Generic command error<br/>
+10001 &nbsp;The command timed out<br/>
+0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The command was successful
 
 <br/><br/><img src='Docs/screenshot_python.png' width=500>
 
-The Python script can run on any system that supports the Python framework. The logger gives a detailed feedback about the connection status and executed command. The option for balloon messages will show a notification every time a command is executed. Auto reconnect will automatically connect when the script is started or when the connection was interrupted. Start minimized will put the application into the system tray on startup.
+The Python script can run on any system that supports the Python framework. The logger gives a detailed feedback about the connection status and executed command. The option for balloon messages will show a notification every time a command is executed. Auto reconnect will automatically connect when the script is started or when the connection was interrupted. Start minimized will put the application into the system tray on startup. 
 
 <a name="Requirements"></a>
 ## Requirements
