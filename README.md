@@ -47,7 +47,7 @@ Open a command window and execute the following commands to install the required
 
 Copy the folder \Logical\mappRemoteShell\PhythonScript to the target PC
 
-Run the file start.py from the PhythonScript folder
+Run the file start.pyw from the PhythonScript folder
 
 ### B&R PLC
 * Copy the package mappRemoteShell into new project
