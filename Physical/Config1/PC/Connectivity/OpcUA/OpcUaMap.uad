@@ -18,7 +18,7 @@
   <DefaultView AclId="3">
     <Module Name="&lt;Default&gt;">
       <Task Name="mappRemote">
-        <Variable Name="mappRemoteBatch" AutomaticEnable="True" />
+        <Variable Name="mappRemoteShell" AutomaticEnable="True" />
       </Task>
     </Module>
   </DefaultView>

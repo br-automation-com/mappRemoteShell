@@ -6,6 +6,6 @@
     <Object Type="File" Description="Global variables">Global.var</Object>
     <Object Type="Package" Description="Global libraries">Libraries</Object>
     <Object Type="Package">mappView</Object>
-    <Object Type="Package">mappRemoteBatch</Object>
+    <Object Type="Package">mappRemoteShell</Object>
   </Objects>
 </Package>

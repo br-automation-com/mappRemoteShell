@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Content id="contentStart" height="700" width="1000" xmlns="http://www.br-automation.com/iat2015/contentDefinition/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Widgets>
-    <Widget xsi:type="widgets.brease.Label" id="Label1" top="30" left="390" width="250" zIndex="0" text="Start Page" textAlign="center" fontSize="20px" />
-    <Widget xsi:type="widgets.brease.NumericInput" id="NumericInput1" top="125" left="160" width="145" height="35" zIndex="1" />
-  </Widgets>
+<Content id="contentStart" height="400" width="800" xmlns="http://www.br-automation.com/iat2015/contentDefinition/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Widgets>
+		<Widget xsi:type="widgets.brease.Label" id="Label3" top="125" left="-5" width="135" zIndex="3" text="Status" textAlign="right" fontSize="20px" />
+		<Widget xsi:type="widgets.brease.Label" id="Label2" top="80" left="-5" width="135" zIndex="1" text="Command" textAlign="right" fontSize="20px" />
+		<Widget xsi:type="widgets.brease.NumericOutput" id="numStatus" top="120" left="125" width="145" height="35" zIndex="0" format="{'metric':{'decimalPlaces':0,'minimumIntegerDigits':1,'maximumIntegerDigits':8},'imperial':{'decimalPlaces':0,'minimumIntegerDigits':1,'maximumIntegerDigits':8},'imperial-us':{'decimalPlaces':0,'minimumIntegerDigits':1,'maximumIntegerDigits':8}}" />
+		<Widget xsi:type="widgets.brease.TextInput" id="txtCommand" top="80" left="125" width="525" zIndex="2" textAlign="left" padding="0px 5px 0px 5px" />
+		<Widget xsi:type="widgets.brease.Button" id="btnExecute" top="80" left="655" width="130" zIndex="4" text="Excecute" fontSize="16px" />
+		<Widget xsi:type="widgets.brease.ToggleButton" id="btnConnecttion" top="120" left="280" width="160" height="35" zIndex="5" mouseDownText="Connected" text="Disconnected" backColor="rgba(255, 0, 0, 1)" disabledBackColor="rgba(255, 0, 0, 1)" disabledTextColor="rgba(0, 0, 0, 1)" fontSize="16px" checkedBackColor="rgba(0, 192, 0, 1)" disabledCheckedBackColor="rgba(0, 192, 0, 1)" enable="false" />
+	</Widgets>
 </Content>

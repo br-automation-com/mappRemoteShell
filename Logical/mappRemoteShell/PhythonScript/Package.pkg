@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio Version=4.7.5.60 SP?>
+<Package xmlns="http://br-automation.co.at/AS/Package">
+  <Objects>
+    <Object Type="File">.pylintrc</Object>
+    <Object Type="File">config.ini</Object>
+    <Object Type="File">mapp.png</Object>
+    <Object Type="File">readme.txt</Object>
+    <Object Type="File">start.py</Object>
+    <Object Type="File">uaclient.py</Object>
+    <Object Type="File">window.py</Object>
+    <Object Type="File">window.ui</Object>
+    <Object Type="File">launch.json</Object>
+    <Object Type="File">settings.json</Object>
+  </Objects>
+</Package>
