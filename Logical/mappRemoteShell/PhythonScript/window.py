@@ -114,7 +114,7 @@ class Ui_MainWindow(object):
         self.labPLC_Ping.setText(_translate("MainWindow", "Ping Status"))
         self.labPLC_Ping_Status.setText(_translate("MainWindow", "Checking..."))
         self.btnConnect.setText(_translate("MainWindow", "Connect"))
-        self.chkBalloon.setText(_translate("MainWindow", "Show baloon message"))
+        self.chkBalloon.setText(_translate("MainWindow", "Show balloon message"))
         self.chkReconnect.setText(_translate("MainWindow", "Auto reconnect"))
         self.chkMinimized.setText(_translate("MainWindow", "Start minimized"))
 

@@ -231,7 +231,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Show baloon message</string>
+     <string>Show balloon message</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="chkReconnect">
