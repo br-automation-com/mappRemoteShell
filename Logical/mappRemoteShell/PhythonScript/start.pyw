@@ -1,7 +1,6 @@
 # ----------------------------------------------------------------------------------------
 # import libraries and functions
 import subprocess
-import asyncio
 import platform
 import sys
 import time
@@ -13,10 +12,10 @@ from datetime import timedelta
 from datetime import datetime
 from window import Ui_MainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
-# ----------------------------------------------------------------------------------------
-# fix windows taskbar
-import ctypes
 
+# ----------------------------------------------------------------------------------------
+# fix windows taskbar icon
+import ctypes
 myappid = u'B&R.mappRemoteShell.V1_0'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
@@ -97,19 +96,21 @@ class OpcAliveCounter(QtCore.QThread):
     def alive_timer():
         ## sometimes the timer is faster than the ui
         if frmMain != None:
-            # only count when connection is active
+            # only count when connection is active and process is not blocking communication
             if frmMain.threadOPC != None and frmMain.threadOPC.client != None and frmMain.threadOPC.client._connected and not frmMain.process_running:
-            # count alive counter up
+                # count alive counter up
                 frmMain.alive_counter = frmMain.alive_counter + 1
-            # connection expired
+            # connection expired after 3x ping counter
             if frmMain.alive_counter > 3:
+                # report disconnect
                 frmMain.threadAliveCounter.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " connection was interrupted", True)
                 time.sleep(0.1)
-                # close connection
+                # close connection, ignore errors
                 try:
                     frmMain.threadOPC.disconnect()
                 except Exception as e:
                     print(e)
+                # reset counter, display connect button
                 frmMain.alive_counter = 0
                 frmMain.btnConnect.setVisible(True)
                 return
@@ -174,14 +175,16 @@ class OpcClientThread(QtCore.QThread):
                 self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " command error -> " + str(e), True)
                 # set status variable to 1
                 if nodeStatus != None:
+                    # set status for command timed out
                     if "timed out" in str(e):
                         dv = ua.DataValue(ua.Variant([ERR_COMMAND_TIMEOUT], ua.VariantType.UInt16))
+                    # set status for generic command failed
                     else:
                         dv = ua.DataValue(ua.Variant([ERR_COMMAND_EXECUTE], ua.VariantType.UInt16))
                     nodeStatus.set_data_value(dv)
 
             finally:
-                # reset execute variable
+                # reset execute variable on PLC
                 exc_opc = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.execute")
                 dv = ua.DataValue(ua.Variant([False], ua.VariantType.Boolean))
                 exc_opc.set_data_value(dv)
@@ -199,14 +202,15 @@ class OpcClientThread(QtCore.QThread):
     # ----------------------------------------------------------------------------------------
     # connect to OPC UA server
     def connect(self, server_url):
-        # start opc ua
         try:
+            # create client connection
             self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " connecting...", False)
             self.client = UaClient()
             self.client.connect("opc.tcp://" + server_url)
             time.sleep(0.5)
             self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " connected successful", True)
 
+            # check if task exists on PLC
             var_structure = self.client.get_node("ns=6;s=::mappRemote")
             result = var_structure.get_node_class()
             self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " support task found on PLC", False)
@@ -216,6 +220,7 @@ class OpcClientThread(QtCore.QThread):
             varAliveCounter = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.alive_counter")
             subHandler = DataChangeHandler()
             subHandler.data_change.connect(self.data_changed, type=QtCore.Qt.QueuedConnection)
+            # create subscription
             self.client.subscribe_datachange(varExecute, subHandler)
             self.client.subscribe_datachange(varAliveCounter, subHandler)
         except Exception as e:
@@ -224,7 +229,7 @@ class OpcClientThread(QtCore.QThread):
    # ----------------------------------------------------------------------------------------
     # disconnect from OPC UA server
     def disconnect(self):
-        # start opc ua
+        # disconnect, ignore errors
         try:
             self.client.disconnect()
         except Exception as e:                    
@@ -233,7 +238,7 @@ class OpcClientThread(QtCore.QThread):
 # ----------------------------------------------------------------------------------------
 # PyQt main frame class
 class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
-    # constants
+    # local constants
     BadNodeIdUnknown = 2150891520
     BadNodeIdInvalid = 2150825984
     BadWriteNotSupported = 2155020288
@@ -246,13 +251,14 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MappRemoteShell, self).__init__()
         self.setupUi(self)
         self.threadOPC = None
+        self.process_running = 0
+        self.setWindowIcon(QtGui.QIcon("mapp.png"))
+        # start connection alive cyclic task
         self.threadAliveCounter = OpcAliveCounter()
         self.threadAliveCounter.start()
         self.threadAliveCounter.sig_log.connect(self.add_log)
         self.threadAliveCounter.reconnect.connect(self.connect_opcua)
         self.alive_counter = 0
-        self.process_running = 0
-        self.setWindowIcon(QtGui.QIcon("mapp.png"))
         # add button connect and exit event
         self.btnConnect.clicked.connect(self.connect_opcua)
         self.btnExit.clicked.connect(self.exit_app)
@@ -321,7 +327,7 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
         self.showMinimized()
         event.ignore()
 
-    # button exit
+    # button exit app
     def exit_app(self):
         if self.threadOPC != None:
             # close connection
@@ -336,6 +342,7 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.threadAliveCounter.deleteLater()
             except Exception as e:
                 print(e)
+        # finally quit application
         app.quit()
         sys.exit(app.exec_())
 
@@ -347,7 +354,7 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
             trayIcon.showMessage("mappRemoteShell", post_text, QtWidgets.QSystemTrayIcon.Information)
 
 # ----------------------------------------------------------------------------------------
-# system tray event show frmMain
+# system tray event show form
 def show_form():
     frmMain.showMaximized()
 # system tray event exit app

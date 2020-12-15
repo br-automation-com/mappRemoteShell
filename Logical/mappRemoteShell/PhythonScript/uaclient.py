@@ -1,3 +1,6 @@
+# ----------------------------------------------------------------------------------------
+# https://github.com/FreeOpcUa/opcua-client-gui
+# ----------------------------------------------------------------------------------------
 import logging
 from PyQt5.QtCore import QSettings
 from opcua import ua
@@ -7,7 +10,6 @@ from opcua import crypto
 from opcua.tools import endpoint_to_strings
 
 logger = logging.getLogger(__name__)
-
 
 class UaClient(object):
     """
