@@ -7,7 +7,7 @@
 
 <a name="Introduction"></a>
 ## Introduction
-This is a sample project to execute a command on a remote PC. The remote command is executed with a Python script that connects via OPC UA to the B&R PLC. The PLC only needs the variable structure to execute command and some code to indicate the connection status. The sample uses a mappView visualization for demo purpose but mappView is not required to run the sample. The variable structure mappRemoteShell has the following members:
+This is a sample project to execute a shell command on a remote PC. The remote command is executed with a Python script that connects via OPC UA to the B&R PLC. The PLC only needs the variable structure to execute command and some code to indicate the connection status. The sample uses a mappView visualization for demo purpose but mappView is not required to run the sample. The variable structure mappRemoteShell has the following members:
 
 * execute &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Starts the remote command
 * command &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The shell command as it would be typed into shell on the remote PC
@@ -44,6 +44,10 @@ Open a command window and execute the following commands to install the required
 * pip install opcua
 * pip install timeloop
 * pip install ConfigParser
+
+Copy the folder \Logical\mappRemoteShell\PhythonScript to the target PC
+
+Run the file start.py from the PhythonScript folder
 
 ### B&R PLC
 * Copy the package mappRemoteShell into new project
