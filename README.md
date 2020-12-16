@@ -22,7 +22,7 @@ The following status codes show the state of the command<br/>
 10002 &nbsp;The response data is larger than the response string on the PLC<br/>
 0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The command was successful
 
-<table><tr><td><img src='Docs/screenshot_python.png' width=400></td><td><img src='Docs/screenshot_plc.png' width=400></td></tr></table>
+<table><tr><td><img src='Docs/screenshot_python.png' width=400><p align="center">Python Script</p></td><td><img src='Docs/screenshot_plc.png' width=400><p align="center">PLC UI</p></td></tr></table>
 
 The Python script can run on any system that supports the Python framework. The logger gives a detailed feedback about the connection status and executed command. The option for balloon messages will show a notification every time a command is executed. Auto reconnect will automatically connect when the script is started or when the connection was interrupted. Start minimized will put the application into the system tray on startup. 
 
