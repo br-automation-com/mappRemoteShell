@@ -3,6 +3,6 @@
 <Package xmlns="http://br-automation.co.at/AS/Package">
   <Objects>
     <Object Type="Program" Language="IEC">mappRemote</Object>
-    <Object Type="Package">PhythonScript</Object>
+    <Object Type="Package">PythonScript</Object>
   </Objects>
 </Package>
