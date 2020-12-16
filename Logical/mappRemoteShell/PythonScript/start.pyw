@@ -31,7 +31,7 @@ if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
 # ----------------------------------------------------------------------------------------
 # local constants
 PING_INTERVAL = 3
-COMMAND_TIMEOUT = 10
+RESPONSE_TIMEOUT = 1
 ERR_COMMAND_EXECUTE = 10000
 ERR_COMMAND_TIMEOUT = 10001
 
@@ -97,8 +97,8 @@ class OpcAliveCounter(QtCore.QThread):
     def alive_timer():
         ## sometimes the timer is faster than the ui
         if frmMain != None:
-            # only count when connection is active and process is not blocking communication
-            if frmMain.threadOPC != None and frmMain.threadOPC.client != None and frmMain.threadOPC.client._connected and not frmMain.process_running:
+            # only count when connection is active
+            if frmMain.threadOPC != None and frmMain.threadOPC.client != None and frmMain.threadOPC.client._connected:
                 # count alive counter up
                 frmMain.alive_counter = frmMain.alive_counter + 1
             # connection expired after 3x ping counter
@@ -157,13 +157,14 @@ class OpcClientThread(QtCore.QThread):
                 nodeStatus.set_data_value(dv)
                 # execute command
                 self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " new command -> " + valExecute, True)
-                frmMain.process_running = True
-                result = subprocess.Popen(valExecute, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-                stdout_value, stderr_value = result.communicate(timeout=COMMAND_TIMEOUT)
-                frmMain.process_running = False
-                # raise exception when command responds with error
-                if stderr_value != "":
-                    raise Exception(stderr_value)
+                result = subprocess.Popen(valExecute, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
+                # check if we have response data, ignore errors
+                try:
+                    stdout_value, stderr_value = result.communicate(timeout=RESPONSE_TIMEOUT)
+                    if stdout_value != "":
+                        self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " command response -> " + stdout_value, False)
+                except Exception as e:
+                    print(e)
                 # set status variable to 0
                 dv = ua.DataValue(ua.Variant([0], ua.VariantType.UInt16))
                 nodeStatus.set_data_value(dv)
@@ -252,7 +253,6 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MappRemoteShell, self).__init__()
         self.setupUi(self)
         self.threadOPC = None
-        self.process_running = 0
         self.setWindowIcon(QtGui.QIcon("mapp.png"))
         # start connection alive cyclic task
         self.threadAliveCounter = OpcAliveCounter()
