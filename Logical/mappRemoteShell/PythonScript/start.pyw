@@ -32,8 +32,10 @@ if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
 # local constants
 PING_INTERVAL = 3
 RESPONSE_TIMEOUT = 1
+RESPONSE_STRING_SIZE = 2000
 ERR_COMMAND_EXECUTE = 10000
-ERR_COMMAND_TIMEOUT = 10001
+ERR_COMMAND_NOT_FOUND = 10001
+ERR_RESPONSE_SIZE = 10002
 
 # ----------------------------------------------------------------------------------------
 # try to ping opc server
@@ -149,26 +151,46 @@ class OpcClientThread(QtCore.QThread):
         if "execute" in str(node) and val:
             try:
                 # get command variable
-                nodeExecute = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.command")
-                valExecute = nodeExecute.get_value()
+                nodeCommand = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.command")
+                valCommand = nodeCommand.get_value()
+                # get command variable
+                nodeResponse = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.response")
                 # set status variable to 65535
                 nodeStatus = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.status")
                 dv = ua.DataValue(ua.Variant([65535], ua.VariantType.UInt16))
                 nodeStatus.set_data_value(dv)
                 # execute command
-                self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " new command -> " + valExecute, True)
-                result = subprocess.Popen(valExecute, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
+                self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " new command -> " + valCommand, True)
+                result = subprocess.Popen(valCommand, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
+
                 # check if we have response data, ignore errors
                 try:
+                    str_response = ""
+                    stdout_value = ""
                     stdout_value, stderr_value = result.communicate(timeout=RESPONSE_TIMEOUT)
                     if stdout_value != "":
                         self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " command response -> " + stdout_value, False)
+                        # make sure response data fits into response string
+                        if len(stdout_value) <= RESPONSE_STRING_SIZE:
+                            str_response = stdout_value
+                        else:
+                            str_response = stdout_value[0:RESPONSE_STRING_SIZE]
+
                 except Exception as e:
                     print(e)
-                # set status variable to 0
-                dv = ua.DataValue(ua.Variant([0], ua.VariantType.UInt16))
+
+                # send response data
+                dv = ua.DataValue(ua.Variant([str_response], ua.VariantType.String))
+                nodeResponse.set_data_value(dv)
+                if len(stdout_value) > RESPONSE_STRING_SIZE:
+                    self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " response error -> maximum string size ("+ str(RESPONSE_STRING_SIZE) + ") exceeded (" + str(len(stdout_value)) + ")", True)
+                    dv = ua.DataValue(ua.Variant([ERR_RESPONSE_SIZE], ua.VariantType.UInt16))
+                else:
+                    self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " command successful", False)
+                    dv = ua.DataValue(ua.Variant([0], ua.VariantType.UInt16))
+
+                # set status variable
                 nodeStatus.set_data_value(dv)
-                self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " command successful", False)
                 time.sleep(0.5)
 
             except Exception as e:
@@ -177,13 +199,18 @@ class OpcClientThread(QtCore.QThread):
                 self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " command error -> " + str(e), True)
                 # set status variable to 1
                 if nodeStatus != None:
-                    # set status for command timed out
-                    if "timed out" in str(e):
-                        dv = ua.DataValue(ua.Variant([ERR_COMMAND_TIMEOUT], ua.VariantType.UInt16))
-                    # set status for generic command failed
+                    if e.errno == 2:
+                        # set status for command not found
+                        dv = ua.DataValue(ua.Variant([ERR_COMMAND_NOT_FOUND], ua.VariantType.UInt16))
+                        nodeStatus.set_data_value(dv)
                     else:
+                        # set status for generic command failed
                         dv = ua.DataValue(ua.Variant([ERR_COMMAND_EXECUTE], ua.VariantType.UInt16))
-                    nodeStatus.set_data_value(dv)
+                        nodeStatus.set_data_value(dv)
+
+                    # send response data
+                    dv = ua.DataValue(ua.Variant(["Command error -> " + str(e)], ua.VariantType.String))
+                    nodeResponse.set_data_value(dv)
 
             finally:
                 # reset execute variable on PLC

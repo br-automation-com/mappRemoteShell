@@ -23,6 +23,7 @@ PROGRAM _CYCLIC
 		ELSE
 			mappRemoteShell.status := ERR_NOT_CONNECTED;
 			mappRemoteShell.execute := FALSE;
+			mappRemoteShell.response := 'Remote script is not connected';
 		END_IF
 	END_IF
 	

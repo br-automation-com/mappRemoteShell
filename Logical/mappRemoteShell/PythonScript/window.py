@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\strickers\Documents\Samples\mappView\mappRemoteShell\Logical\mappRemoteShell\PhythonScript\window.ui'
+# Form implementation generated from reading ui file 'c:\Users\strickers\Documents\Samples\mappView\mappRemoteShell\Logical\mappRemoteShell\PythonScript\window.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.1
 #
@@ -41,7 +41,7 @@ class Ui_MainWindow(object):
         self.labPLC_Port.setFont(font)
         self.labPLC_Port.setObjectName("labPLC_Port")
         self.txtPLC_IP = QtWidgets.QLineEdit(self.centralwidget)
-        self.txtPLC_IP.setGeometry(QtCore.QRect(90, 10, 131, 25))
+        self.txtPLC_IP.setGeometry(QtCore.QRect(90, 10, 151, 25))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.txtPLC_IP.setFont(font)
@@ -49,7 +49,7 @@ class Ui_MainWindow(object):
         self.txtPLC_IP.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.txtPLC_IP.setObjectName("txtPLC_IP")
         self.txtPLC_Port = QtWidgets.QLineEdit(self.centralwidget)
-        self.txtPLC_Port.setGeometry(QtCore.QRect(130, 40, 91, 25))
+        self.txtPLC_Port.setGeometry(QtCore.QRect(130, 40, 111, 25))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.txtPLC_Port.setFont(font)
@@ -66,7 +66,7 @@ class Ui_MainWindow(object):
         self.labPLC_Ping.setFont(font)
         self.labPLC_Ping.setObjectName("labPLC_Ping")
         self.labPLC_Ping_Status = QtWidgets.QLabel(self.centralwidget)
-        self.labPLC_Ping_Status.setGeometry(QtCore.QRect(100, 70, 121, 25))
+        self.labPLC_Ping_Status.setGeometry(QtCore.QRect(120, 70, 121, 25))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.labPLC_Ping_Status.setFont(font)
@@ -81,19 +81,19 @@ class Ui_MainWindow(object):
         self.btnConnect.setFont(font)
         self.btnConnect.setObjectName("btnConnect")
         self.chkBalloon = QtWidgets.QCheckBox(self.centralwidget)
-        self.chkBalloon.setGeometry(QtCore.QRect(250, 10, 231, 20))
+        self.chkBalloon.setGeometry(QtCore.QRect(270, 10, 231, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.chkBalloon.setFont(font)
         self.chkBalloon.setObjectName("chkBalloon")
         self.chkReconnect = QtWidgets.QCheckBox(self.centralwidget)
-        self.chkReconnect.setGeometry(QtCore.QRect(250, 30, 211, 20))
+        self.chkReconnect.setGeometry(QtCore.QRect(270, 30, 211, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.chkReconnect.setFont(font)
         self.chkReconnect.setObjectName("chkReconnect")
         self.chkMinimized = QtWidgets.QCheckBox(self.centralwidget)
-        self.chkMinimized.setGeometry(QtCore.QRect(250, 50, 211, 20))
+        self.chkMinimized.setGeometry(QtCore.QRect(270, 50, 211, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.chkMinimized.setFont(font)
