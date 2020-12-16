@@ -2,6 +2,9 @@
 <?AutomationStudio Version=4.7.5.60?>
 <Hardware xmlns="http://br-automation.co.at/AS/Hardware">
   <Module Name="PC" Type="PC_any" Version="1.1.0.0" OrderNumber="PC">
+    <Connector Name="IF3">
+      <Parameter ID="InternetAddress" Value="0.0.0.0" />
+    </Connector>
     <Parameter ID="ConfigurationID" Value="mappViewSample_Config1" />
     <Parameter ID="Cyclic8Duration" Value="10000" />
     <Parameter ID="ActivateOpcUa" Value="1" />

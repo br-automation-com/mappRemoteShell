@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<?AutomationStudio Version=4.4.6.71 SP?>
+<?AutomationStudio Version=4.7.5.60 SP?>
 <Physical xmlns="http://br-automation.co.at/AS/Physical">
   <Objects>
-    <Object Type="Configuration">Config1</Object>
+    <Object Type="Configuration">ARsim</Object>
   </Objects>
 </Physical>
