@@ -51,9 +51,9 @@ Open a command window and execute the following commands to install the required
 * pip install timeloop
 * pip install ConfigParser
 
-Copy the folder \Logical\mappRemoteShell\PhythonScript to the target PC
+Copy the folder \Logical\mappRemoteShell\PythonScript to the target PC
 
-Run the file start.pyw from the PhythonScript folder
+Run the file start.pyw from the PythonScript folder
 
 ### B&R PLC
 * Copy the package mappRemoteShell into new project
