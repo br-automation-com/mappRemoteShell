@@ -16,15 +16,16 @@ This is a sample project to execute a shell command on a remote PC. The remote c
 * status  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The status of the command
 
 The following status codes show the state of the command<br/>
-65535 &nbsp;The command is still busy<br/>
-10000 &nbsp;Generic command error<br/>
-10001 &nbsp;The command was not found<br/>
-10002 &nbsp;The response data is larger than the response string on the PLC<br/>
-0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The command was successful
+* 65535 &nbsp;&nbsp;The command is still busy<br/>
+* 10000 &nbsp;&nbsp;Generic command error<br/>
+* 10001 &nbsp;&nbsp;The command was not found<br/>
+* 10002 &nbsp;&nbsp;The response data is larger than the response string on the PLC<br/>
+* 0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The command was successful
+<br/><br/>
 
 <table><tr><td><img src='Docs/screenshot_python.png' width=400><p align="center">Python Script</p></td><td><img src='Docs/screenshot_plc.png' width=400><p align="center">PLC UI</p></td></tr></table>
 
-The Python script can run on any system that supports the Python framework. The logger gives a detailed feedback about the connection status and executed command. The option for balloon messages will show a notification every time a command is executed. Auto reconnect will automatically connect when the script is started or when the connection was interrupted. Start minimized will put the application into the system tray on startup. 
+The Python script can run on any system that supports the Python framework. The logger gives a detailed feedback about the connection status and executed command. The option for balloon messages will show a notification every time a command is executed. Auto reconnect will automatically connect when the script is started or when the connection was interrupted. Start minimized will put the application into the system tray on startup. If the command produces response data the script will transfer this data back to PLC. If the command produces an error the error message will be sent back as response to the PLC.
 
 <a name="Requirements"></a>
 ## Requirements
