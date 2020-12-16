@@ -39,7 +39,6 @@ ERR_RESPONSE_SIZE = 10002
 
 # ----------------------------------------------------------------------------------------
 # try to ping opc server
-
 def ping_ip(current_ip_address):
     try:
         str_ping = "ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', current_ip_address)
