@@ -60,7 +60,7 @@ class Ui_MainWindow(object):
         self.txtStatus.setGeometry(QtCore.QRect(10, 100, 621, 291))
         self.txtStatus.setObjectName("txtStatus")
         self.labPLC_Ping = QtWidgets.QLabel(self.centralwidget)
-        self.labPLC_Ping.setGeometry(QtCore.QRect(10, 70, 81, 25))
+        self.labPLC_Ping.setGeometry(QtCore.QRect(10, 70, 101, 25))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.labPLC_Ping.setFont(font)
