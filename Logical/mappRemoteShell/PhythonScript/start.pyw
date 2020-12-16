@@ -15,9 +15,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 # ----------------------------------------------------------------------------------------
 # fix windows taskbar icon
-import ctypes
-myappid = u'B&R.mappRemoteShell.V1_0'
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+if platform.system() == "Windows":
+    import ctypes
+    myappid = u'B&R.mappRemoteShell.V1_0'
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 # ----------------------------------------------------------------------------------------
 # fix high resolution scaling
