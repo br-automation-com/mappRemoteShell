@@ -1,4 +1,5 @@
 {
-    "C_Cpp.default.configurationProvider": "vscode-brautomationtools"
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
 
 }

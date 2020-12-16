@@ -3,4 +3,4 @@
 /Temp
 /*.set
 /*.isopen
-Logical/mappRemoteShell/PhythonScript/__pycache__/
+__pycache__
