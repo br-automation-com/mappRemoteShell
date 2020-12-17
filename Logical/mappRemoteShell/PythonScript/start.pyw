@@ -31,6 +31,7 @@ if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
 # ----------------------------------------------------------------------------------------
 # local constants
 PING_INTERVAL = 3
+LOGGER_MAX_LEN = 50000
 RESPONSE_TIMEOUT = 2
 RESPONSE_STRING_SIZE = 2000
 ERR_COMMAND_EXECUTE = 10000
@@ -376,7 +377,10 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
 
     # new log entry from client thread
     def add_log(self, post_text, balloon):
-        self.txtStatus.appendPlainText(post_text)
+        new_text = self.txtStatus.toPlainText() + post_text + "\r"
+        if len(new_text) > LOGGER_MAX_LEN:
+            new_text = new_text[len(new_text)-LOGGER_MAX_LEN: len(new_text)]
+        self.txtStatus.setPlainText(new_text)
         self.txtStatus.moveCursor(QtGui.QTextCursor.End)
         # show balloon text        
         if balloon and self.chkBalloon.isChecked():
