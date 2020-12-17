@@ -183,7 +183,7 @@ class OpcClientThread(QtCore.QThread):
                 dv = ua.DataValue(ua.Variant([str_response], ua.VariantType.String))
                 nodeResponse.set_data_value(dv)
                 if len(stdout_value) > RESPONSE_STRING_SIZE:
-                    self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " response error -> maximum string size ("+ str(RESPONSE_STRING_SIZE) + ") exceeded (" + str(len(stdout_value)) + ")", True)
+                    self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " response error -> maximum string size ("+ str(RESPONSE_STRING_SIZE) + ") exceeded limit (" + str(len(stdout_value)) + ")", True)
                     dv = ua.DataValue(ua.Variant([ERR_RESPONSE_SIZE], ua.VariantType.UInt16))
                 else:
                     self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " command successful", False)
@@ -377,6 +377,7 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
     # new log entry from client thread
     def add_log(self, post_text, balloon):
         self.txtStatus.appendPlainText(post_text)
+        self.txtStatus.moveCursor(QtGui.QTextCursor.End)
         # show balloon text        
         if balloon and self.chkBalloon.isChecked():
             trayIcon.showMessage("mappRemoteShell", post_text, QtWidgets.QSystemTrayIcon.Information)
