@@ -7,7 +7,7 @@
     <Widget xsi:type="widgets.brease.TextInput" id="txtCommand" top="20" left="125" width="525" zIndex="2" textAlign="left" padding="0px 5px 0px 5px" />
     <Widget xsi:type="widgets.brease.Button" id="btnExecute" top="20" left="655" width="130" zIndex="4" text="Excecute" fontSize="16px" />
     <Widget xsi:type="widgets.brease.ToggleButton" id="btnConnecttion" top="60" left="280" width="160" height="35" zIndex="5" mouseDownText="Connected" text="Disconnected" backColor="rgba(255, 0, 0, 1)" disabledBackColor="rgba(255, 0, 0, 1)" disabledTextColor="rgba(0, 0, 0, 1)" fontSize="16px" checkedBackColor="rgba(0, 192, 0, 1)" disabledCheckedBackColor="rgba(0, 192, 0, 1)" enable="false" />
-    <Widget xsi:type="widgets.brease.TextOutput" id="txtResponse" top="115" left="125" width="660" height="190" zIndex="6" autoScroll="true" multiLine="true" borderWidth="1px" borderStyle="solid" textAlign="left top" padding="0px 5px 0px 5px" />
+    <Widget xsi:type="widgets.brease.TextOutput" id="txtResponse" top="115" left="125" width="660" height="270" zIndex="6" autoScroll="true" multiLine="true" borderWidth="1px" borderStyle="solid" textAlign="left top" padding="0px 5px 0px 5px" />
     <Widget xsi:type="widgets.brease.Label" id="Label4" top="115" left="-5" width="135" zIndex="7" text="Response" textAlign="right" fontSize="20px" />
   </Widgets>
 </Content>
