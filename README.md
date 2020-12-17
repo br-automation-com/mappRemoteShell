@@ -73,5 +73,11 @@ Here are few examples that can be used as command string.
 <a name="Revision-History"></a>
 ## Revision History
 
+#### Version 0.3
+* Support for command response to PLC
+* Detailed error text when command fails to PLC
+* Python window is now resizable
+* Bug fixes and code cleanup
+
 #### Version 0.1
 * First release
