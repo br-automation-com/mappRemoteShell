@@ -31,7 +31,7 @@ if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
 # ----------------------------------------------------------------------------------------
 # local constants
 PING_INTERVAL = 3
-RESPONSE_TIMEOUT = 1
+RESPONSE_TIMEOUT = 2
 RESPONSE_STRING_SIZE = 2000
 ERR_COMMAND_EXECUTE = 10000
 ERR_COMMAND_NOT_FOUND = 10001
@@ -160,7 +160,7 @@ class OpcClientThread(QtCore.QThread):
                 nodeStatus.set_data_value(dv)
                 # execute command
                 self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " new command -> " + valCommand, True)
-                result = subprocess.Popen(valCommand, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
+                result = subprocess.Popen(valCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
 
                 # check if we have response data, ignore errors
                 try:
@@ -168,6 +168,7 @@ class OpcClientThread(QtCore.QThread):
                     stdout_value = ""
                     stdout_value, stderr_value = result.communicate(timeout=RESPONSE_TIMEOUT)
                     if stdout_value != "":
+                        stdout_value = stdout_value.decode('utf8', errors='backslashreplace').replace('\r', '')
                         self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " command response -> " + stdout_value, False)
                         # make sure response data fits into response string
                         if len(stdout_value) <= RESPONSE_STRING_SIZE:

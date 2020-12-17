@@ -1,5 +1,5 @@
 
-mapp Remote Shell Script Version 0.1
+mapp Remote Shell Script Version 0.3
 
 Installation
 
