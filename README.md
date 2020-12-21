@@ -7,10 +7,10 @@
 
 <a name="Introduction"></a>
 ## Introduction
-This is a sample project to execute a shell command on a remote PC. The remote command is executed with a Python script that connects via OPC UA to the B&R PLC. The PLC only needs the variable structure to execute command and some code to indicate the connection status. The sample uses a mappView visualization for demo purpose but mappView is not required to run the sample. The variable structure mappRemoteShell has the following members:
+This is a sample project to execute a shell command on a remote PC. The remote command is executed with a Python script that connects via OPC UA to the B&R PLC. The PLC only needs the variable structure to execute a command and some code to indicate the connection status. The sample uses a mappView visualization for demo purpose but mappView is not required to run the sample. The variable structure mappRemoteShell has the following members:
 
 * execute &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Starts the remote command. The Python script resets this variable when the command is finished.
-* command &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The shell command that is excecuted on the remote PC
+* command &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The shell command string that is excecuted on the remote PC
 * alive_counter &nbsp; This counter is used to detect the connection state
 * connected &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Indicates that the remote PC is connected and ready to receive a command
 * status  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The status of the command
@@ -25,7 +25,7 @@ The following status codes show the state of the command<br/>
 
 <table><tr><td><img src='Docs/screenshot_python.png' width=400><p align="center">Python Script</p></td><td><img src='Docs/screenshot_plc.png' width=400><p align="center">PLC UI</p></td></tr></table>
 
-The Python script can run on any system that supports the Python framework. The logger gives a detailed feedback about the connection status and executed command. The option for balloon messages will show a notification every time a command is executed. Auto reconnect will automatically connect when the script is started or when the connection was interrupted. Start minimized will put the application into the system tray on startup. If the command produces response data the script will transfer this data back to PLC. If the command produces an error the error message will be sent back as response to the PLC.
+The Python script can run on any system that supports the Python framework. The logger gives a detailed feedback about the connection status and executed command. The option for balloon messages will show a notification every time a command is executed. Auto reconnect will automatically connect when the script is started or when the connection was interrupted. Start minimized will put the application into the system tray on startup. If the command produces response data the script will transfer this data back to PLC. If the command generates an error the error message will be sent back as response to the PLC.
 
 <a name="Requirements"></a>
 ## Requirements
@@ -64,7 +64,7 @@ Run the file start.pyw from the PythonScript folder
 
 <a name="Samples"></a>
 ## Samples
-Here are few examples that can be used as command string.
+Here are few examples that can be used as a command string.
 
 * Start Windows file explorer ``` explorer.exe ```
 * Start Automation Studio ``` C:\BrAutomation\AS47\Bin-en\AutomationStudio.exe ```
