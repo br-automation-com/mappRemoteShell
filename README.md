@@ -40,7 +40,7 @@ Recommended task class is #8 with a 10ms cycle time.
 
 ### PC
 
-Download and install Python from www.https://www.python.org/
+Download and install Python from https://www.python.org/
 
 Start the installation, set checkboxes, customize installation
 
