@@ -80,7 +80,7 @@ class Ui_MainWindow(object):
         self.chkReconnect.setFont(font)
         self.chkReconnect.setObjectName("chkReconnect")
         self.txtPLC_Port = QtWidgets.QLineEdit(self.frame)
-        self.txtPLC_Port.setGeometry(QtCore.QRect(270, 40, 111, 25))
+        self.txtPLC_Port.setGeometry(QtCore.QRect(300, 40, 80, 25))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.txtPLC_Port.setFont(font)
@@ -102,7 +102,7 @@ class Ui_MainWindow(object):
         self.labPLC_Ping_Status.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.labPLC_Ping_Status.setObjectName("labPLC_Ping_Status")
         self.labPLC_Port = QtWidgets.QLabel(self.frame)
-        self.labPLC_Port.setGeometry(QtCore.QRect(150, 40, 81, 25))
+        self.labPLC_Port.setGeometry(QtCore.QRect(150, 40, 140, 25))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.labPLC_Port.setFont(font)
@@ -138,7 +138,7 @@ class Ui_MainWindow(object):
         self.txtPLC_Port.setText(_translate("MainWindow", "4840"))
         self.labPLC_IP.setText(_translate("MainWindow", "PLC IP"))
         self.labPLC_Ping_Status.setText(_translate("MainWindow", "Checking..."))
-        self.labPLC_Port.setText(_translate("MainWindow", "PLC Port"))
+        self.labPLC_Port.setText(_translate("MainWindow", "PLC OPC UA Port"))
 
 
 if __name__ == "__main__":

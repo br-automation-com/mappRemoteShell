@@ -13,6 +13,8 @@ from datetime import datetime
 from window import Ui_MainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+frmMain = None
+
 # ----------------------------------------------------------------------------------------
 # fix windows taskbar icon
 if platform.system() == "Windows":
@@ -40,7 +42,7 @@ ERR_RESPONSE_SIZE = 10002
 
 # ----------------------------------------------------------------------------------------
 # try to ping opc server
-def ping_ip(current_ip_address):
+def ping_ip(current_ip_address:str):
     try:
         str_ping = "ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', current_ip_address)
         result = subprocess.Popen(
@@ -277,7 +279,7 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
 
     # ----------------------------------------------------------------------------------------
     # initialize application
-    def __init__(self, show_balloon, show_reconnect, show_minimized):
+    def __init__(self, ip, port_opcua, show_balloon, show_reconnect, show_minimized):
         super(MappRemoteShell, self).__init__()
         self.setupUi(self)
         self.threadOPC = None
@@ -291,13 +293,29 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
         # add button connect and exit event
         self.btnConnect.clicked.connect(self.connect_opcua)
         self.btnExit.clicked.connect(self.exit_app)
-        # add checkbox events
+        # add config events
+        self.txtPLC_IP.setText(ip)
+        self.txtPLC_IP.textChanged.connect(self.config_ip)
+        self.txtPLC_Port.setText(port_opcua)
+        self.txtPLC_Port.textChanged.connect(self.config_port_opcua)
+        self.chkBalloon.setChecked(show_balloon)
         self.chkBalloon.clicked.connect(self.config_balloon)
         self.chkBalloon.setChecked(show_balloon)
         self.chkReconnect.clicked.connect(self.config_reconnect)
         self.chkReconnect.setChecked(show_reconnect)
         self.chkMinimized.clicked.connect(self.config_minimized)
         self.chkMinimized.setChecked(show_minimized)
+
+    # ip changed event
+    def config_ip(self):
+        config.set('eth', 'ip', self.txtPLC_IP.text())
+        with open('config.ini', 'w') as configfile:
+            config.write(configfile)
+
+    def config_port_opcua(self):
+        config.set('eth', 'port_opcua', self.txtPLC_Port.text())
+        with open('config.ini', 'w') as configfile:
+            config.write(configfile)            
 
     # checkbox balloon event
     def config_balloon(self):
@@ -402,6 +420,8 @@ def exit_app():
 if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read("config.ini")
+    config_ip = config.get('eth', 'ip')
+    config_port_opcua = config.get('eth', 'port_opcua')
     config_balloon = config.get('default', 'show_balloon') == "True"
     config_reconnect = config.get('default', 'auto_reconnect') == "True"
     config_minimized = config.get('default', 'start_minimized') == "True"
@@ -421,7 +441,7 @@ if __name__ == '__main__':
     trayIcon.setContextMenu(menu)
     trayIcon.activated.connect(show_form)
     # create main form
-    frmMain = MappRemoteShell(config_balloon, config_reconnect, config_minimized)
+    frmMain = MappRemoteShell(config_ip, config_port_opcua,config_balloon, config_reconnect, config_minimized)
     if not config_minimized:
         frmMain.show()
     app.exec_()
