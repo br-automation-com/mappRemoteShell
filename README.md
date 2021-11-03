@@ -49,7 +49,7 @@ Start the installation, set checkboxes, customize installation, restart the syst
 Open a command window and execute the following commands to install the required packages
 
 * pip3 install PyQt5
-* pip3 install opcua
+* pip3 install asyncua
 * pip3 install timeloop
 * pip3 install ConfigParser
 
@@ -75,6 +75,7 @@ Here are few examples that can be used as a command string.
 
 #### Version 0.4
 * Python Script: Added ip and port to config.ini
+* Python Script: Switched to new asyncua library
 * Automation Studio: Update sample to mapp 5.15
 
 #### Version 0.3
