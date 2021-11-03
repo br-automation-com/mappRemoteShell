@@ -53,7 +53,7 @@ Open a command window and execute the following commands to install the required
 * pip3 install timeloop
 * pip3 install ConfigParser
 
-Copy the folder \Logical\mappRemoteShell\PythonScript to the target PC
+Copy the folder \Logical\mappRemoteShell\PythonScript to the target PC. Change the config.ini file as needed.
 
 Run the file start.pyw from the PythonScript folder
 
@@ -72,6 +72,10 @@ Here are few examples that can be used as a command string.
 
 <a name="Revision-History"></a>
 ## Revision History
+
+#### Version 0.4
+* Python Script: Added ip and port to config.ini
+* Automation Studio: Update sample to mapp 5.15
 
 #### Version 0.3
 * Support for command response to PLC
