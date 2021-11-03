@@ -1,6 +1,7 @@
 #### Version 0.4
 * Python Script: Added ip and port to config.ini
-* Automation Studio: Update to mapp 5.15
+* Python Script: Switched to new asyncua library
+* Automation Studio: Update sample to mapp 5.15
 
 #### Version 0.3
 * Support for command response to PLC

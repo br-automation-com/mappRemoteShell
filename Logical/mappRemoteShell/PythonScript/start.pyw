@@ -6,7 +6,7 @@ import sys
 import time
 import configparser
 from uaclient import UaClient
-from opcua import ua
+from asyncua.sync import ua
 from timeloop import Timeloop
 from datetime import timedelta
 from datetime import datetime
@@ -160,7 +160,7 @@ class OpcClientThread(QtCore.QThread):
                 # set status variable to 65535
                 nodeStatus = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.status")
                 dv = ua.DataValue(ua.Variant([65535], ua.VariantType.UInt16))
-                nodeStatus.set_data_value(dv)
+                nodeStatus.set_value(dv)
                 # execute command
                 self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " new command -> " + valCommand, True)
                 result = subprocess.Popen(valCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
@@ -184,7 +184,7 @@ class OpcClientThread(QtCore.QThread):
 
                 # send response data
                 dv = ua.DataValue(ua.Variant([str_response], ua.VariantType.String))
-                nodeResponse.set_data_value(dv)
+                nodeResponse.set_value(dv)
                 if len(stdout_value) > RESPONSE_STRING_SIZE:
                     self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " response error -> maximum string size ("+ str(RESPONSE_STRING_SIZE) + ") exceeded limit (" + str(len(stdout_value)) + ")", True)
                     dv = ua.DataValue(ua.Variant([ERR_RESPONSE_SIZE], ua.VariantType.UInt16))
@@ -193,7 +193,7 @@ class OpcClientThread(QtCore.QThread):
                     dv = ua.DataValue(ua.Variant([0], ua.VariantType.UInt16))
 
                 # set status variable
-                nodeStatus.set_data_value(dv)
+                nodeStatus.set_value(dv)
                 time.sleep(0.5)
 
             except Exception as e:
@@ -205,26 +205,26 @@ class OpcClientThread(QtCore.QThread):
                     if e.errno == 2:
                         # set status for command not found
                         dv = ua.DataValue(ua.Variant([ERR_COMMAND_NOT_FOUND], ua.VariantType.UInt16))
-                        nodeStatus.set_data_value(dv)
+                        nodeStatus.set_value(dv)
                     else:
                         # set status for generic command failed
                         dv = ua.DataValue(ua.Variant([ERR_COMMAND_EXECUTE], ua.VariantType.UInt16))
-                        nodeStatus.set_data_value(dv)
+                        nodeStatus.set_value(dv)
 
                     # send response data
                     dv = ua.DataValue(ua.Variant(["Command error -> " + str(e)], ua.VariantType.String))
-                    nodeResponse.set_data_value(dv)
+                    nodeResponse.set_value(dv)
 
             finally:
                 # reset execute variable on PLC
                 exc_opc = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.execute")
                 dv = ua.DataValue(ua.Variant([False], ua.VariantType.Boolean))
-                exc_opc.set_data_value(dv)
+                exc_opc.set_value(dv)
 
         # reset alive counter on PLC
         if "alive_counter" in str(node) and val > 500:
             dv = ua.DataValue(ua.Variant([0], ua.VariantType.UInt16))
-            node.set_data_value(dv)
+            node.set_value(dv)
 
     # ----------------------------------------------------------------------------------------
     # connect to OPC UA server
@@ -244,7 +244,7 @@ class OpcClientThread(QtCore.QThread):
 
             # check if task exists on PLC
             var_structure = self.client.get_node("ns=6;s=::mappRemote")
-            result = var_structure.get_node_class()
+            #result = var_structure.get_node_class()
             self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " support task found on PLC", False)
 
             # connect opc variables
