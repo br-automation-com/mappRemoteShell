@@ -153,12 +153,12 @@ class OpcClientThread(QtCore.QThread):
         if "execute" in str(node) and val:
             try:
                 # get command variable
-                nodeCommand = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.command")
+                nodeCommand = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".command")
                 valCommand = nodeCommand.get_value()
                 # get command variable
-                nodeResponse = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.response")
+                nodeResponse = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".response")
                 # set status variable to 65535
-                nodeStatus = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.status")
+                nodeStatus = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".status")
                 dv = ua.DataValue(ua.Variant([65535], ua.VariantType.UInt16))
                 nodeStatus.set_value(dv)
                 # execute command
@@ -217,7 +217,7 @@ class OpcClientThread(QtCore.QThread):
 
             finally:
                 # reset execute variable on PLC
-                exc_opc = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.execute")
+                exc_opc = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".execute")
                 dv = ua.DataValue(ua.Variant([False], ua.VariantType.Boolean))
                 exc_opc.set_value(dv)
 
@@ -243,13 +243,13 @@ class OpcClientThread(QtCore.QThread):
             self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " connected successful", True)
 
             # check if task exists on PLC
-            var_structure = self.client.get_node("ns=6;s=::mappRemote")
+            var_structure = self.client.get_node("ns=6;s=::" + config_plc_task)
             #result = var_structure.get_node_class()
             self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " support task found on PLC", False)
 
             # connect opc variables
-            varExecute = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.execute")
-            varAliveCounter = self.client.get_node("ns=6;s=::mappRemote:mappRemoteShell.alive_counter")
+            varExecute = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".execute")
+            varAliveCounter = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".alive_counter")
             subHandler = DataChangeHandler()
             subHandler.data_change.connect(self.data_changed, type=QtCore.Qt.QueuedConnection)
             # create subscription
@@ -422,6 +422,8 @@ if __name__ == '__main__':
     config.read("config.ini")
     config_ip = config.get('eth', 'ip')
     config_port_opcua = config.get('eth', 'port_opcua')
+    config_plc_task = config.get('plc', 'task')
+    config_plc_var = config.get('plc', 'var')
     config_balloon = config.get('default', 'show_balloon') == "True"
     config_reconnect = config.get('default', 'auto_reconnect') == "True"
     config_minimized = config.get('default', 'start_minimized') == "True"

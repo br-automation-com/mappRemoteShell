@@ -1,6 +1,4 @@
 {
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
-    "qtForPython.designer.path": "c:\\Users\\strickers\\AppData\\Roaming\\Python\\Python39\\site-packages\\qt5_applications\\Qt\\bin\\designer.exe"
-
 }
