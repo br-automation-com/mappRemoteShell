@@ -74,6 +74,7 @@ Here are few examples that can be used as a command string.
 ## Revision History
 
 #### Version 0.4
+* Python Script: Added task and variable name to config.ini
 * Python Script: Added ip and port to config.ini
 * Python Script: Switched to new asyncua library
 * Automation Studio: Update sample to mapp 5.15
