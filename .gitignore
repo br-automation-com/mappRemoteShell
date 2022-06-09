@@ -4,3 +4,5 @@
 /*.set
 /*.isopen
 __pycache__
+
+mkdocs/

@@ -1,3 +1,8 @@
+#### Version 0.5
+* Python Script: Better error handling when task or variable dont exist on PLC
+* Automation Studio: Code cleanup
+* New documentation
+
 #### Version 0.4
 * Python Script: Added task and variable name to config.ini
 * Python Script: Added ip and port to config.ini
