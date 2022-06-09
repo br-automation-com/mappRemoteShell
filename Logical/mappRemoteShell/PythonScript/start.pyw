@@ -1,10 +1,12 @@
 # ----------------------------------------------------------------------------------------
 # import libraries and functions
+import logging
 import subprocess
 import platform
 import sys
 import time
 import configparser
+import ping3
 from uaclient import UaClient
 from asyncua.sync import ua
 from timeloop import Timeloop
@@ -14,6 +16,7 @@ from window import Ui_MainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 frmMain = None
+logging.basicConfig(level=logging.DEBUG)
 
 # ----------------------------------------------------------------------------------------
 # fix windows taskbar icon
@@ -45,8 +48,8 @@ ERR_RESPONSE_SIZE = 10002
 def ping_ip(current_ip_address:str):
     try:
         str_ping = "ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', current_ip_address)
-        result = subprocess.Popen(
-            str_ping, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).wait()
+        result = subprocess.Popen(str_ping, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).wait()
+        logging.debug('Ping:' + str(result))
         if result:
             return False
         else:
