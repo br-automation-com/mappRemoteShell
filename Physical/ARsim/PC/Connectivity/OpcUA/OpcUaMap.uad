@@ -17,7 +17,7 @@
   </Aliases>
   <DefaultView AclId="3">
     <Module Name="&lt;Default&gt;">
-      <Task Name="mappRemote">
+      <Task Name="mpRemote">
         <Variable Name="mappRemoteShell" AutomaticEnable="True" />
       </Task>
     </Module>

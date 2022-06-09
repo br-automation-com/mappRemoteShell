@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<?AutomationStudio Version=4.7.5.60 SP?>
+<?AutomationStudio Version=4.7.7.74 SP?>
 <SwConfiguration CpuAddress="SL1" xmlns="http://br-automation.co.at/AS/SwConfiguration">
   <TaskClass Name="Cyclic#1" />
   <TaskClass Name="Cyclic#2" />
@@ -9,7 +9,7 @@
   <TaskClass Name="Cyclic#6" />
   <TaskClass Name="Cyclic#7" />
   <TaskClass Name="Cyclic#8">
-    <Task Name="mappRemote" Source="mappRemoteShell.mappRemote.prg" Memory="UserROM" Language="IEC" Debugging="true" />
+    <Task Name="mpRemote" Source="mappRemoteShell.mpRemote.prg" Memory="UserROM" Language="IEC" Debugging="true" />
   </TaskClass>
   <Binaries>
     <BinaryObject Name="TCData" Source="" Memory="SystemROM" Language="Binary" />

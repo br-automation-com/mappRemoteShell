@@ -2,20 +2,20 @@
 <BindingsSet id="bindingGlobal" xmlns="http://www.br-automation.com/iat2015/binding/engineering/v2" xmlns:bt="http://www.br-automation.com/iat2015/bindingListTypes/engineering/v2" xmlns:be="http://www.br-automation.com/iat2015/bindingListEmbedded/engineering/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Bindings>
 		<Binding mode="twoWay">
-			<Source xsi:type="opcUa" refId="::mappRemote:mappRemoteShell.status" attribute="value" />
+			<Source xsi:type="opcUa" refId="::mpRemote:mappRemoteShell.status" attribute="value" />
 			<Target xsi:type="brease" contentRefId="contentStart" widgetRefId="numStatus" attribute="value" />
 		</Binding>
 		<Binding mode="twoWay">
-			<Source xsi:type="opcUa" refId="::mappRemote:mappRemoteShell.connected" attribute="value" />
+			<Source xsi:type="opcUa" refId="::mpRemote:mappRemoteShell.connected" attribute="value" />
 			<Target xsi:type="brease" contentRefId="contentStart" widgetRefId="btnConnecttion" attribute="value" />
 		</Binding>
 		<Binding mode="twoWay">
-			<Source xsi:type="opcUa" refId="::mappRemote:mappRemoteShell.command" attribute="value" />
+			<Source xsi:type="opcUa" refId="::mpRemote:mappRemoteShell.command" attribute="value" />
 			<Target xsi:type="brease" contentRefId="contentStart" widgetRefId="txtCommand" attribute="value" />
 		</Binding>
-	<Binding mode="twoWay">
-<Source xsi:type="opcUa" refId="::mappRemote:mappRemoteShell.response" attribute="value" />
-<Target xsi:type="brease" contentRefId="contentStart" widgetRefId="txtResponse" attribute="value" />
-</Binding>
-</Bindings>
+		<Binding mode="twoWay">
+			<Source xsi:type="opcUa" refId="::mpRemote:mappRemoteShell.response" attribute="value" />
+			<Target xsi:type="brease" contentRefId="contentStart" widgetRefId="txtResponse" attribute="value" />
+		</Binding>
+	</Bindings>
 </BindingsSet>

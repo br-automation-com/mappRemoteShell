@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<?AutomationStudio Version=4.7.6.114 SP?>
+<?AutomationStudio Version=4.7.7.74 SP?>
 <Package xmlns="http://br-automation.co.at/AS/Package">
   <Objects>
     <Object Type="File">revision.txt</Object>
-    <Object Type="Program" Language="IEC">mappRemote</Object>
+    <Object Type="Program" Language="IEC">mpRemote</Object>
     <Object Type="Package">PythonScript</Object>
   </Objects>
 </Package>
