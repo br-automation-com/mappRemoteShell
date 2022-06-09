@@ -1,12 +1,10 @@
 # ----------------------------------------------------------------------------------------
 # import libraries and functions
-import logging
 import subprocess
 import platform
 import sys
 import time
 import configparser
-import ping3
 from uaclient import UaClient
 from asyncua.sync import ua
 from timeloop import Timeloop
@@ -16,7 +14,6 @@ from window import Ui_MainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 frmMain = None
-logging.basicConfig(level=logging.DEBUG)
 
 # ----------------------------------------------------------------------------------------
 # fix windows taskbar icon
@@ -49,7 +46,6 @@ def ping_ip(current_ip_address:str):
     try:
         str_ping = "ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', current_ip_address)
         result = subprocess.Popen(str_ping, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).wait()
-        logging.debug('Ping:' + str(result))
         if result:
             return False
         else:
@@ -219,10 +215,13 @@ class OpcClientThread(QtCore.QThread):
                     nodeResponse.set_value(dv)
 
             finally:
-                # reset execute variable on PLC
-                exc_opc = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".execute")
-                dv = ua.DataValue(ua.Variant([False], ua.VariantType.Boolean))
-                exc_opc.set_value(dv)
+                try:
+                    # reset execute variable on PLC
+                    exc_opc = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".execute")
+                    dv = ua.DataValue(ua.Variant([False], ua.VariantType.Boolean))
+                    exc_opc.set_value(dv)
+                except Exception as e:                    
+                    print(e)
 
         # reset alive counter on PLC
         if "alive_counter" in str(node) and val > 500:
@@ -247,17 +246,40 @@ class OpcClientThread(QtCore.QThread):
 
             # check if task exists on PLC
             var_structure = self.client.get_node("ns=6;s=::" + config_plc_task)
-            #result = var_structure.get_node_class()
-            self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " support task found on PLC", False)
+            result = var_structure.get_children()
+            if len(result) != 0:
+                self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " support task found on PLC", False)
+                result = var_structure.get_children()
+                print(result[0])
+                if str(result[0]) == "ns=6;s=::" + config_plc_task + ":" + config_plc_var:
+                    self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " variable structure found on PLC", False)
+ 
+                    # connect opc variables
+                    varExecute = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".execute")
+                    varAliveCounter = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".alive_counter")
+                    subHandler = DataChangeHandler()
+                    subHandler.data_change.connect(self.data_changed, type=QtCore.Qt.QueuedConnection)
+                    # create subscription
+                    self.client.subscribe_datachange(varExecute, subHandler)
+                    self.client.subscribe_datachange(varAliveCounter, subHandler)
+                else:
+                    self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " variable structure is missing on PLC", False)
+                    # close connection, ignore errors
+                    try:
+                        self.btnConnect.setVisible(False)
+                        self.disconnect()
+                    except Exception as e:
+                        print(e)
 
-            # connect opc variables
-            varExecute = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".execute")
-            varAliveCounter = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".alive_counter")
-            subHandler = DataChangeHandler()
-            subHandler.data_change.connect(self.data_changed, type=QtCore.Qt.QueuedConnection)
-            # create subscription
-            self.client.subscribe_datachange(varExecute, subHandler)
-            self.client.subscribe_datachange(varAliveCounter, subHandler)
+            else:
+                self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " task " + config_plc_task + " or variable " + config_plc_var + " is missing or variable " + config_plc_var + " is not activated for OPC UA access , make sure mappRemote task is running on PLC", True)
+                # close connection, ignore errors
+                try:
+                    self.btnConnect.setVisible(False)
+                    self.disconnect()
+                except Exception as e:
+                    print(e)
+
         except Exception as e:
             raise e
 
@@ -366,7 +388,7 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
             elif e.args[0] == self.ConnectionTimedOut:
                 self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " timed out, make sure IP address and port is correct and OPC server is running", True)
             elif e.args[0] == self.BadNodeIdUnknown or e.args[0] == self.BadNodeIdInvalid:
-                self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " mappRemote task or variable is missing, make sure mappRemote task is running on PLC", True)
+                self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " task " + config_plc_task + " or variable " + config_plc_var + " is missing or variable " + config_plc_var + " is not activated for OPC UA access , make sure mappRemote task is running on PLC", True)
             elif e.args[0] == self.BadWriteNotSupported:
                 self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " mappRemote variable no write access", True)
             else:
