@@ -1,0 +1,22 @@
+/* --------------------------------------------------------------- */
+/* Table styling                                                   */
+/* --------------------------------------------------------------- */
+
+/* Make borders solid */
+table,
+th ,
+td {
+    border: 1px solid rgba(0, 0, 0, 0.35);
+}
+
+/* Make table headers orange */
+table,
+th {
+    background-color: #dbbd53;
+}
+
+/* Alternate colors between rows */
+tr:nth-child(even) {
+    background-color: #D6EEEE;
+}
+
