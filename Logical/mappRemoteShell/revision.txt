@@ -1,3 +1,5 @@
+For a detailed description see https://br-automation-com.github.io/mappRemoteShell/
+
 #### Version 0.5
 * Python Script: Better error handling when task or variable dont exist on PLC
 * Automation Studio: Code cleanup
