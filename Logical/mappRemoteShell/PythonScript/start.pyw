@@ -248,29 +248,36 @@ class OpcClientThread(QtCore.QThread):
             var_structure = self.client.get_node("ns=6;s=::" + config_plc_task)
             result = var_structure.get_children()
             if len(result) != 0:
-                self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " support task found on PLC", False)
+                self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " support task " + config_plc_task + " found on PLC", False)
                 result = var_structure.get_children()
-                print(result[0])
-                if str(result[0]) == "ns=6;s=::" + config_plc_task + ":" + config_plc_var:
-                    self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " variable structure found on PLC", False)
- 
-                    # connect opc variables
-                    varExecute = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".execute")
-                    varAliveCounter = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".alive_counter")
-                    subHandler = DataChangeHandler()
-                    subHandler.data_change.connect(self.data_changed, type=QtCore.Qt.QueuedConnection)
-                    # create subscription
-                    self.client.subscribe_datachange(varExecute, subHandler)
-                    self.client.subscribe_datachange(varAliveCounter, subHandler)
-                else:
-                    self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " variable structure is missing on PLC", False)
+                opc_var_found = False
+
+                for opc_var in result:
+                    print(opc_var)
+
+                    if str(opc_var) == "ns=6;s=::" + config_plc_task + ":" + config_plc_var:
+                        self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " variable " + config_plc_var + "structure found on PLC", False)
+    
+                        # connect opc variables
+                        varExecute = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".execute")
+                        varAliveCounter = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".alive_counter")
+                        subHandler = DataChangeHandler()
+                        subHandler.data_change.connect(self.data_changed, type=QtCore.Qt.QueuedConnection)
+                        # create subscription
+                        self.client.subscribe_datachange(varExecute, subHandler)
+                        self.client.subscribe_datachange(varAliveCounter, subHandler)
+                        # exit for
+                        opc_var_found = True
+                        break
+
+                if not opc_var_found:
+                    self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " variable structure " + config_plc_var + " is missing on PLC or is not activated for OPC UA access", False)
                     # close connection, ignore errors
                     try:
                         self.btnConnect.setVisible(False)
                         self.disconnect()
                     except Exception as e:
                         print(e)
-
             else:
                 self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " task " + config_plc_task + " or variable " + config_plc_var + " is missing or variable " + config_plc_var + " is not activated for OPC UA access , make sure mappRemote task is running on PLC", True)
                 # close connection, ignore errors
