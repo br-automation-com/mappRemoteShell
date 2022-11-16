@@ -291,6 +291,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#sample-time-zone-synchronization" class="md-nav__link">
+    Sample Time Zone Synchronization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#change-task-name-or-variable" class="md-nav__link">
     Change task name or variable
   </a>
@@ -377,6 +384,36 @@
 <li>Shutdown Windows <code>powershell shutdown /s</code> </li>
 <li>Restart Windows <code>powershell shutdown /r</code> </li>
 </ul>
+<h2 id="sample-time-zone-synchronization">Sample Time Zone Synchronization</h2>
+<p>This branch shows how to sync the time zone of a windows PC to the PLC. It uses the shell command "tzutil /g" to read the time zone information. Folow this link to the branch
+https://github.com/br-automation-com/mappRemoteShell/tree/time_zone</p>
+<p>The time zone samples uses the following variables:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cmdReadTimeZone</td>
+<td>Gets the current time zone from the PLC.</td>
+</tr>
+<tr>
+<td>cmdSyncTimeZone</td>
+<td>Gets the windows time zone and sets the same time zone on the PLC.</td>
+</tr>
+<tr>
+<td>plcTimeZone</td>
+<td>PLC time zone ID. See help file (875a2145-4257-45c4-8fa7-197b095caadd) for details.</td>
+</tr>
+<tr>
+<td>winTimeZone</td>
+<td>Windows time zone information. See documentation for shell command tzutil for more details.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="change-task-name-or-variable">Change task name or variable</h2>
 <p>In some cases it can be neccessary to change the task or variable struture names. This can be the case if the script should control more than one PC. In this case the task must be duplicated.</p>
 <h4 id="duplicate-task">Duplicate task</h4>
