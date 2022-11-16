@@ -27,5 +27,8 @@ PROGRAM _CYCLIC
 		END_IF
 	END_IF
 	
+	// Action for time zone synchronization
+	TimeZone;
+	
 END_PROGRAM
 

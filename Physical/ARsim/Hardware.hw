@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<?AutomationStudio Version=4.7.5.60?>
+<?AutomationStudio Version=4.7.7.74?>
 <Hardware xmlns="http://br-automation.co.at/AS/Hardware">
-  <Module Name="PC" Type="PC_any" Version="1.1.0.0" OrderNumber="PC">
-    <Connector Name="IF3">
-      <Parameter ID="InternetAddress" Value="0.0.0.0" />
+  <Module Name="X20CP3585" Type="X20CP3585" Version="1.8.1.0">
+    <Connector Name="IF1">
+      <Parameter ID="ActivateIna" Value="0" />
+    </Connector>
+    <Connector Name="IF2">
+      <Parameter ID="ActivateDevice" Value="1" />
+      <Parameter ID="InaPort" Value="11160" />
     </Connector>
     <Parameter ID="ConfigurationID" Value="mappViewSample_Config1" />
-    <Parameter ID="Cyclic8Duration" Value="10000" />
     <Parameter ID="ActivateOpcUa" Value="1" />
     <Parameter ID="OpcUaInformationModels_PV_Version" Value="1" />
   </Module>

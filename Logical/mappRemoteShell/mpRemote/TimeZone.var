@@ -1,0 +1,9 @@
+VAR
+	cmdReadTimeZone : BOOL;
+	cmdSyncTimeZone : BOOL;
+	plcTimeZone : UINT;
+	winTimeZone : STRING[80];
+	fctCfgSetTimeZone : CfgSetTimeZone;
+	fctCfgGetTimeZone : CfgGetTimeZone;
+	timezoneID : UINT;
+END_VAR
