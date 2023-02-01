@@ -39,6 +39,7 @@ RESPONSE_STRING_SIZE = 2000
 ERR_COMMAND_EXECUTE = 10000
 ERR_COMMAND_NOT_FOUND = 10001
 ERR_RESPONSE_SIZE = 10002
+ERR_USER_ACCESS = 10003
 
 # ----------------------------------------------------------------------------------------
 # try to ping opc server
@@ -201,7 +202,12 @@ class OpcClientThread(QtCore.QThread):
                 self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " command error -> " + str(e), True)
                 # set status variable to 1
                 if nodeStatus != None:
-                    if e.errno == 2:
+                    if hasattr(e, 'code') and e.code == 2149515264:
+                        # set status for command not found
+                        self.sig_log.emit(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " No permission to write to OPC UA variable", True)
+                        self.disconnect()
+                        return
+                    elif hasattr(e, 'errno') and e.errno == 2:
                         # set status for command not found
                         dv = ua.DataValue(ua.Variant([ERR_COMMAND_NOT_FOUND], ua.VariantType.UInt16))
                         nodeStatus.set_value(dv)
@@ -217,14 +223,15 @@ class OpcClientThread(QtCore.QThread):
             finally:
                 try:
                     # reset execute variable on PLC
-                    exc_opc = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".execute")
-                    dv = ua.DataValue(ua.Variant([False], ua.VariantType.Boolean))
-                    exc_opc.set_value(dv)
+                    if frmMain.threadOPC.client._connected:
+                        exc_opc = self.client.get_node("ns=6;s=::" + config_plc_task + ":" + config_plc_var + ".execute")
+                        dv = ua.DataValue(ua.Variant([False], ua.VariantType.Boolean))
+                        exc_opc.set_value(dv)
                 except Exception as e:                    
                     print(e)
 
         # reset alive counter on PLC
-        if "alive_counter" in str(node) and val > 500:
+        if "alive_counter" in str(node) and val > 500 and frmMain.threadOPC.client._connected:
             dv = ua.DataValue(ua.Variant([0], ua.VariantType.UInt16))
             node.set_value(dv)
 
