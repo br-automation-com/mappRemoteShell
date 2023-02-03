@@ -1,5 +1,11 @@
 For a detailed description see https://br-automation-com.github.io/mappRemoteShell/
 
+#### Version 0.7
+* Python Script: Better error handling when OPC UA variable has no permission to write
+
+#### Version 0.6
+* Python Script: Improved command variable identification
+
 #### Version 0.5
 * Python Script: Better error handling when task or variable dont exist on PLC
 * Automation Studio: Code cleanup

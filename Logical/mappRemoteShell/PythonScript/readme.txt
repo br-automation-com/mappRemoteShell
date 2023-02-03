@@ -3,7 +3,7 @@ mapp Remote Shell Script Version 0.3
 
 Installation
 
-* Download and install Python 3.9 from www.https://www.python.org/
+* Download and install Python 3.9 from https://www.python.org/
 * open command shell and install the following packages by running
     - pip3 install PyQt5
     - pip3 install opcua
