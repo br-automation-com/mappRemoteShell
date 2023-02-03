@@ -1,5 +1,8 @@
 For a detailed description see https://br-automation-com.github.io/mappRemoteShell/
 
+#### Version 0.8
+* Python Script: Better error handling with hypervisor systems and automatic reconnect
+
 #### Version 0.7
 * Python Script: Better error handling when OPC UA variable has no permission to write
 

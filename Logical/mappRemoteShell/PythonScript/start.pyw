@@ -66,11 +66,13 @@ def ping_job():
             frmMain.labPLC_Ping_Status.setStyleSheet("color: green;")
             frmMain.labPLC_Ping_Status.setText("OK")
             frmMain.btnConnect.setEnabled(True)
+            frmMain.can_ping = True
         else:
             # show ping status not ok
             frmMain.labPLC_Ping_Status.setStyleSheet("color: red;")
             frmMain.labPLC_Ping_Status.setText("Failed")
             frmMain.btnConnect.setEnabled(False)
+            frmMain.can_ping = False
 
 # ----------------------------------------------------------------------------------------
 # callback for opc ua value change
@@ -121,8 +123,8 @@ class OpcAliveCounter(QtCore.QThread):
                 return
 
             # reconnect to OPC UA server
-            IsConnectd = frmMain.threadOPC != None and frmMain.threadOPC.client != None and frmMain.threadOPC.client._connected
-            if not IsConnectd and frmMain.threadAliveCounter != None and frmMain.chkReconnect.isChecked():
+            IsConnectd = frmMain.threadOPC != None and frmMain.threadOPC.client != None and frmMain.threadOPC.client._connected 
+            if not IsConnectd and frmMain.threadAliveCounter != None and frmMain.chkReconnect.isChecked() and frmMain.can_ping:
                 # tell main thread to reconnect
                 frmMain.threadAliveCounter.reconnect.emit()
 
@@ -230,10 +232,13 @@ class OpcClientThread(QtCore.QThread):
                 except Exception as e:                    
                     print(e)
 
+        try:
         # reset alive counter on PLC
-        if "alive_counter" in str(node) and val > 500 and frmMain.threadOPC.client._connected:
-            dv = ua.DataValue(ua.Variant([0], ua.VariantType.UInt16))
-            node.set_value(dv)
+            if "alive_counter" in str(node) and val > 500 and frmMain.threadOPC.client._connected:
+                dv = ua.DataValue(ua.Variant([0], ua.VariantType.UInt16))
+                node.set_value(dv)
+        except Exception as e:                    
+            print(e)
 
     # ----------------------------------------------------------------------------------------
     # connect to OPC UA server
@@ -329,6 +334,7 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
         self.threadAliveCounter.sig_log.connect(self.add_log)
         self.threadAliveCounter.reconnect.connect(self.connect_opcua)
         self.alive_counter = 0
+        self.can_ping = False
         # add button connect and exit event
         self.btnConnect.clicked.connect(self.connect_opcua)
         self.btnExit.clicked.connect(self.exit_app)
@@ -397,14 +403,17 @@ class MappRemoteShell(QtWidgets.QMainWindow, Ui_MainWindow):
         except Exception as e:
             print(e)
 
-            if e.args[0] == self.ConnectionRefusedError:
-                self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " connection refused, make sure IP address and port is correct and OPC server is running", True)
-            elif e.args[0] == self.ConnectionTimedOut:
-                self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " timed out, make sure IP address and port is correct and OPC server is running", True)
-            elif e.args[0] == self.BadNodeIdUnknown or e.args[0] == self.BadNodeIdInvalid:
-                self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " task " + config_plc_task + " or variable " + config_plc_var + " is missing or variable " + config_plc_var + " is not activated for OPC UA access , make sure mappRemote task is running on PLC", True)
-            elif e.args[0] == self.BadWriteNotSupported:
-                self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " mappRemote variable no write access", True)
+            if len(e.args) > 0:
+                if e.args[0] == self.ConnectionRefusedError:
+                    self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " connection refused, make sure IP address and port is correct and OPC server is running", True)
+                elif e.args[0] == self.ConnectionTimedOut:
+                    self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " timed out, make sure IP address and port is correct and OPC server is running", True)
+                elif e.args[0] == self.BadNodeIdUnknown or e.args[0] == self.BadNodeIdInvalid:
+                    self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " task " + config_plc_task + " or variable " + config_plc_var + " is missing or variable " + config_plc_var + " is not activated for OPC UA access , make sure mappRemote task is running on PLC", True)
+                elif e.args[0] == self.BadWriteNotSupported:
+                    self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " mappRemote variable no write access", True)
+                else:
+                    self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " unexpected error:" + str(sys.exc_info()[0]), True)
             else:
                 self.add_log(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " unexpected error:" + str(sys.exc_info()[0]), True)
 
